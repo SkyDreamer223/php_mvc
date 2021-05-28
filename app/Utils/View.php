@@ -33,7 +33,7 @@ Class View {
         $keys = array_map(function($item){
             return'{{'.$item.'}}';
         },$keys);
-
+        
         return str_replace($keys, array_values($vars), $contentView);
         //echo '<pre>'; print_r($keys); echo '</pre>'; exit;
         
