@@ -1,7 +1,23 @@
 <?php
     
-    require_once __DIR__.'/vendor/autoload.php';
+    require __DIR__.'/vendor/autoload.php';
 
-    use \App\Controller\Pages\Home;
+    
+    use \App\Http\Router;
+    use \App\Utils\View;
+    
+    define('URL', 'http://localhost/php/php_mvc');
+    
+    View::init([
+            'URL' => URL,
+        ]);
 
-    echo Home::getHome();
+    $obRouter = new Router(URL);
+
+    include __DIR__.'/routes/pages.php';
+
+    $obRouter->run()->sendResponse();
+
+   
+    
+
