@@ -45,7 +45,7 @@ class Router {
      * @return void
      */
     public function __construct($url){
-        $this->request = new Request;
+        $this->request = new Request($this);
         $this->url = $url;
         $this->setPrefix();
     }
@@ -236,6 +236,14 @@ class Router {
             return new Response($e->getCode(), $e->getMessage());
         }
 
+    }
+    /**
+     * Methode qui retourne URL actuel
+     *
+     * @return void
+     */
+    public function getCurrentUrl(){
+        return $this->url.$this->getUri();
     }
 
 }

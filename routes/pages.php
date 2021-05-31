@@ -20,3 +20,15 @@ $obRouter->get('/page/{idPage}/{action}', [
         return new Response(200, 'Page '.$idPage.' - '.$action);
     }
 ]);
+
+$obRouter->get('/feedback', [
+    function($request){
+        return new Response(200, Pages\Feedback::getFeedbacks($request));
+    }
+]);
+
+$obRouter->post('/feedback', [
+    function($request){
+        return new Response(200, Pages\Feedback::insertFeedback($request));
+    }
+]);
