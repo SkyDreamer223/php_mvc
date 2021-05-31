@@ -4,6 +4,7 @@ namespace App\Http;
 
 use \Closure;
 use \Exception;
+use \ReflectionFunction;
 
 class Router {
 
@@ -177,9 +178,18 @@ class Router {
 
         foreach($this->routes as $patternRoute => $methods){
 
-            if(preg_match($patternRoute, $uri)){
+            if(preg_match($patternRoute, $uri, $matches)){
                 
-                if($methods[$httpMethod]){
+                if(isset($methods[$httpMethod])){
+
+                    unset($matches[0]);
+                    
+                    //KEYS
+
+                    $keys = $methods[$httpMethod]['variables'];
+                    $methods[$httpMethod]['variables'] = array_combine($keys, $matches);
+                    $methods[$httpMethod]['variables']['request'] = $this->request;
+                    
                     
                     return $methods[$httpMethod];
                 }
@@ -202,24 +212,25 @@ class Router {
         try {
 
             $route = $this->getRoute();
-            echo '<pre>';
-            print_r($route);
-            echo '</pre>'; exit;
-            
-            
-            
 
             
-
+            
             if(!isset($route['controller'])){
                 throw new Exception('l\'Url ne peut pas être traité', 500);
             }
 
             $args = [];
 
-            return call_user_func_array($route['controller'], $args);
+            //REFLECTION
+            $reflection = new ReflectionFunction($route['controller']);
 
-            
+            foreach($reflection->getParameters() as $parameter){
+                $name = $parameter->getName();
+                $args[$name] = $route['variables'][$name] ?? '';
+                
+            }
+
+            return call_user_func_array($route['controller'], $args);
 
         }catch(Exception $e){
             return new Response($e->getCode(), $e->getMessage());

@@ -11,7 +11,7 @@ $obRouter->get('/', [
 
 $obRouter->get('/about', [
     function(){
-        return new Response(200, Pages\About::getHome());
+        return new Response(200, Pages\About::getAbout());
     }
 ]);
 

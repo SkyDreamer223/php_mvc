@@ -12,7 +12,7 @@
          *
          * @return string
          */
-        public static function getHome(){
+        public static function getAbout(){
 
             $obOrganization = new Organization;
 
